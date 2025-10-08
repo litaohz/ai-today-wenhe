@@ -761,14 +761,11 @@ const ReferenceLink = styled.a`
 `;
 
 interface Reference {
-  id: number;
+  index: number;
   title: string;
   content: string;
   section: string;
-  links: Array<{
-    url: string;
-    text: string;
-  }>;
+  url: string;
 }
 
 interface DataDisplayProps {
@@ -1124,21 +1121,15 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
               {selectedReference.content}
             </ReferenceText>
             
-            {selectedReference.links && selectedReference.links.length > 0 && (
+            {selectedReference.url && (
               <ReferenceLinks>
-                <h4 style={{ color: 'var(--neon-green)', marginBottom: '1rem' }}>
-                  相关链接:
-                </h4>
-                {selectedReference.links.map((link, index) => (
-                  <ReferenceLink
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {link.text}
-                  </ReferenceLink>
-                ))}
+                <ReferenceLink
+                  href={selectedReference.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  查看原文
+                </ReferenceLink>
               </ReferenceLinks>
             )}
           </ReferenceContent>
@@ -1161,7 +1152,7 @@ const renderMarkdown = (
   const processReferences = (content: string): string => {
     const result = content.replace(/\[(\d+)\]/g, (match, refId) => {
       const refNumber = parseInt(refId);
-      const reference = references?.find(ref => ref.id === refNumber);
+      const reference = references?.find(ref => ref.index === refNumber);
       
       if (reference) {
         return `<span class="reference" data-ref-id="${refId}">${refId}</span>`;
@@ -1177,7 +1168,7 @@ const renderMarkdown = (
     span: ({ className, children, ...props }: any) => {
       if (className === 'reference') {
         const refId = parseInt(props['data-ref-id']);
-        const reference = references.find(ref => ref.id === refId);
+        const reference = references.find(ref => ref.index === refId);
         
         return (
           <span 

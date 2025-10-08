@@ -192,12 +192,32 @@ class AzureOpenAIClient:
             return None
             
     def _organize_content_for_llm(self, article_data: Dict[str, Any]) -> str:
-        """组织content用于LLM分析，优先使用subtitle和sections"""
+        """组织content用于LLM分析，直接JSON序列化sections并添加index"""
+        import json
         try:
             # 获取基本信息
             title = article_data.get('title', '')
             subtitle = article_data.get('subtitle', '')
             sections = article_data.get('sections', [])
+            
+            # 为sections中的articles添加index
+            article_index = 1
+            indexed_sections = []
+            
+            for section in sections:
+                section_copy = section.copy()
+                articles = section.get('articles', [])
+                indexed_articles = []
+                
+                for article in articles:
+                    article_copy = article.copy()
+                    # 为每个article添加index
+                    article_copy['index'] = article_index
+                    indexed_articles.append(article_copy)
+                    article_index += 1
+                
+                section_copy['articles'] = indexed_articles
+                indexed_sections.append(section_copy)
             
             # 构建结构化content
             organized_content = []
@@ -214,24 +234,10 @@ class AzureOpenAIClient:
             organized_content.append("注意：以下内容包含英文标题，请在处理时将所有英文标题翻译为中文。")
             organized_content.append("")  # 空行分隔
             
-            # 添加sections内容
-            if sections:
-                organized_content.append("主要内容分类:")
-                for section in sections:
-                    section_title = section.get('title', '')
-                    articles = section.get('articles', [])
-                    
-                    if section_title and articles:  # 只处理有文章的section
-                        organized_content.append(f"\n## {section_title}")
-                        
-                        for article in articles:
-                            article_title = article.get('title', '')
-                            article_content = article.get('content', '')
-                            
-                            if article_title:
-                                organized_content.append(f"- {article_title}")
-                            if article_content:
-                                organized_content.append(f"  {article_content}")
+            # 直接JSON序列化sections
+            if indexed_sections:
+                organized_content.append("主要内容分类 (JSON格式):")
+                organized_content.append(json.dumps(indexed_sections, ensure_ascii=False, indent=2))
             else:
                 # 如果没有sections，使用原始content作为fallback
                 original_content = article_data.get('content', '')
@@ -247,9 +253,9 @@ class AzureOpenAIClient:
             return article_data.get('content', '')
 
     def _extract_references_from_sections(self, sections: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """从sections中提取文章引用信息"""
+        """从sections中提取文章引用信息，使用articles中的links和index"""
         references = []
-        ref_index = 1
+        article_index = 1
         
         for section in sections:
             section_title = section.get('title', '')
@@ -258,18 +264,23 @@ class AzureOpenAIClient:
             for article in articles:
                 article_title = article.get('title', '')
                 article_content = article.get('content', '')
-                article_links = article.get('links', [])
+                
+                # 从links数组中提取URL
+                article_url = ''
+                links = article.get('links', [])
+                if links and len(links) > 0:
+                    article_url = links[0].get('url', '')
                 
                 if article_title:  # 只有有标题的文章才作为引用
                     reference = {
-                        'id': ref_index,
+                        'index': article_index,  # 使用index而不是id
                         'title': article_title,
                         'content': article_content,
                         'section': section_title,
-                        'links': article_links
+                        'url': article_url  # 从links中提取的url
                     }
                     references.append(reference)
-                    ref_index += 1
+                    article_index += 1
                     
         return references
 
@@ -287,9 +298,28 @@ class AzureOpenAIClient:
             # 直接用优化后的内容覆盖原始content
             content = organized_content
             
-            # 提取引用信息
+            # 提取引用信息 - 使用带有index的sections
             sections = article_data.get('sections', [])
-            references = self._extract_references_from_sections(sections)
+            # 为sections中的articles添加index（与_organize_content_for_llm中的逻辑保持一致）
+            article_index = 1
+            indexed_sections = []
+            
+            for section in sections:
+                section_copy = section.copy()
+                articles = section.get('articles', [])
+                indexed_articles = []
+                
+                for article in articles:
+                    article_copy = article.copy()
+                    # 为每个article添加index
+                    article_copy['index'] = article_index
+                    indexed_articles.append(article_copy)
+                    article_index += 1
+                
+                section_copy['articles'] = indexed_articles
+                indexed_sections.append(section_copy)
+            
+            references = self._extract_references_from_sections(indexed_sections)
             
             app_logger.info(f"开始处理文章: {title}")
             app_logger.info(f"优化后的内容长度: {len(content)} 字符")

@@ -150,6 +150,26 @@ export class ApiManager {
     }
   }
 
+  // 获取指定日期的 Markdown 内容
+  static async getSchedulerMarkdown(date: string): Promise<{ success: boolean; content?: string; error?: string }> {
+    try {
+      const response = await apiClient.get(`/scheduler/markdown/${date}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('[ApiManager] 获取 Markdown 内容失败:', error);
+      if (error.response?.status === 404) {
+        return {
+          success: false,
+          error: `找不到日期 ${date} 的内容`
+        };
+      }
+      return {
+        success: false,
+        error: error.message || '获取 Markdown 内容失败'
+      };
+    }
+  }
+
   // 错误处理
   private static handleError(error: any): ApiError {
     if (axios.isAxiosError(error)) {

@@ -136,12 +136,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
       const date = new Date(today);
       date.setDate(today.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
-      const displayName = i === 1 ? '当前' : 
-                         i === 2 ? '前天' : 
-                         `${i}天前`;
       dates.push({
         value: dateStr,
-        label: displayName,
         fullDate: date.toLocaleDateString('zh-CN', {
           month: 'short',
           day: 'numeric',
@@ -161,16 +157,11 @@ const DatePicker: React.FC<DatePickerProps> = ({
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    if (dateStr === today.toISOString().split('T')[0]) {
-      return '今天';
-    } else if (dateStr === yesterday.toISOString().split('T')[0]) {
-      return '当前';
-    } else {
-      return date.toLocaleDateString('zh-CN', {
-        month: 'short',
-        day: 'numeric'
-      });
-    }
+    return date.toLocaleDateString('zh-CN', {
+      month: 'short',
+      day: 'numeric'
+    });
+    
   };
 
   // 点击外部关闭
@@ -244,10 +235,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
                   whileHover={{ x: 4 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>{date.label}</span>
-                    <span style={{ opacity: 0.7 }}>{date.fullDate}</span>
-                  </div>
+                  {date.fullDate}
                 </QuickDateButton>
               ))}
             </QuickDateList>

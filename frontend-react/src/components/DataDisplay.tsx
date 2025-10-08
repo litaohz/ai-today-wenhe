@@ -863,6 +863,129 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
           {renderMarkdown(summary, references, setSelectedReference)}
         </Panel>
 
+        {/* 只渲染"其他资讯"，隐藏"快速链接" */}
+        {sections && sections.length > 0 && sections
+          .filter(section => {
+            // 只显示"其他资讯"
+            const allowedTitles = [
+              'Miscellaneous', 
+              '其他资讯'
+            ];
+            return allowedTitles.includes(section.title);
+          })
+          .map((section, sectionIndex) => (
+          <Panel key={sectionIndex} variants={itemVariants}>
+            <PanelTitle>
+              {section.title === 'Miscellaneous' || section.title === '其他资讯' ? '🌐 其他资讯' :
+               section.title === 'Quick Links' || section.title === '快速链接' ? '� 快速链接' :
+               section.title}
+            </PanelTitle>
+            
+            {section.articles && section.articles.map((article, articleIndex) => {
+              const firstLink = article.links && article.links.length > 0 ? article.links[0] : null;
+              
+              return (
+                <div
+                  key={articleIndex}
+                  onClick={() => {
+                    if (firstLink) {
+                      window.open(firstLink.url, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
+                  style={{
+                    padding: '1rem',
+                    marginBottom: '0.8rem',
+                    background: 'rgba(0, 20, 40, 0.5)',
+                    border: '1px solid rgba(0, 255, 255, 0.2)',
+                    borderRadius: '6px',
+                    cursor: firstLink ? 'pointer' : 'default',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (firstLink) {
+                      e.currentTarget.style.background = 'rgba(0, 255, 255, 0.1)';
+                      e.currentTarget.style.borderColor = 'var(--neon-cyan)';
+                      e.currentTarget.style.transform = 'translateX(5px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (firstLink) {
+                      e.currentTarget.style.background = 'rgba(0, 20, 40, 0.5)';
+                      e.currentTarget.style.borderColor = 'rgba(0, 255, 255, 0.2)';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }
+                  }}
+                >
+                  <h4 style={{
+                    color: 'var(--neon-cyan)',
+                    margin: '0 0 0.3rem 0',
+                    fontSize: '1rem',
+                    fontWeight: 600
+                  }}>
+                    {section.title === 'Quick Links' || section.title === '快速链接' ? '▶' : '📰'} {article.title}
+                  </h4>
+                  {article.content && (
+                    <p style={{
+                      color: 'var(--text-secondary)',
+                      margin: 0,
+                      fontSize: '0.85rem',
+                      lineHeight: 1.4
+                    }}>
+                      {article.content}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+            
+            {/* 在第一个 section 后面添加 links */}
+            {sectionIndex === 0 && links && links.map((link, linkIndex) => (
+              <div
+                key={`link-${linkIndex}`}
+                onClick={() => window.open(link.url, '_blank', 'noopener,noreferrer')}
+                style={{
+                  padding: '1rem',
+                  marginBottom: '0.8rem',
+                  background: 'rgba(0, 20, 40, 0.5)',
+                  border: '1px solid rgba(0, 255, 255, 0.2)',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 255, 255, 0.1)';
+                  e.currentTarget.style.borderColor = 'var(--neon-cyan)';
+                  e.currentTarget.style.transform = 'translateX(5px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 20, 40, 0.5)';
+                  e.currentTarget.style.borderColor = 'rgba(0, 255, 255, 0.2)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
+              >
+                <h4 style={{
+                  color: 'var(--neon-cyan)',
+                  margin: '0 0 0.3rem 0',
+                  fontSize: '1rem',
+                  fontWeight: 600
+                }}>
+                  🔗 {link.title}
+                </h4>
+                {link.description && (
+                  <p style={{
+                    color: 'var(--text-secondary)',
+                    margin: 0,
+                    fontSize: '0.85rem',
+                    lineHeight: 1.4
+                  }}>
+                    {link.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </Panel>
+        ))}
+
         {/* 暂时注释掉深度分析模块 */}
         {/* <Panel variants={itemVariants}>
           <PanelTitle>深度分析</PanelTitle>
@@ -1073,7 +1196,8 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
         </Panel>
       )} */}
 
-      {links.length > 0 && (
+      {/* 原本的 links 已经合并到"其他资讯" section 中，不再单独显示 */}
+      {/* {links.length > 0 && (
         <LinkContainer>
           {links.map((link, index) => (
             <LinkCard
@@ -1090,7 +1214,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({
             </LinkCard>
           ))}
         </LinkContainer>
-      )}
+      )} */}
 
       {/* 引用弹窗 */}
       {selectedReference && (
@@ -1147,6 +1271,9 @@ const renderMarkdown = (
   setSelectedReference?: (ref: Reference | null) => void
 ): JSX.Element => {
   if (!text) return <span>暂无内容</span>;
+  
+  // 替换标题文本
+  text = text.replace(/其他资讯与快速链接/g, '快速链接');
   
   // 处理引用标记 [1], [2] 等
   const processReferences = (content: string): string => {

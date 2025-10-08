@@ -34,10 +34,9 @@ class AzureOpenAIClient:
 9. **引用标记**：在提及具体文章或重要信息时，使用[1]、[2]等数字标记进行引用
 10. **标题翻译**：所有英文标题和分类名称必须翻译为中文，包括但不限于：
     - "Headlines & Launches" → "头条新闻与产品发布"
-    - "Deep Dives & Analysis" → "深度分析"
+    - "Deep Dives & Analysis" → "分析报告"
     - "Engineering & Research" → "工程与研究"
-    - "Miscellaneous" → "其他资讯"
-    - "Quick Links" → "快速链接"
+    - "Miscellaneous" or "Quick Links" → "其他资讯"
     - 所有文章标题都要翻译为中文
 
 输出格式示例：
@@ -45,7 +44,7 @@ class AzureOpenAIClient:
 - **OpenAI**发布了新的GPT模型[1]，性能提升显著
 - **Google**推出了新的AI工具[2]，专注于代码生成
 
-## 🔍 深度分析  
+## 🔍 分析报告  
 - 研究显示LLM在特定任务上的表现[3]
 - 分析了AI应用的投资趋势[4]
 

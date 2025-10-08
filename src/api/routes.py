@@ -554,3 +554,62 @@ async def get_crawl_stats():
             success=False,
             error=f"获取统计信息失败: {str(e)}"
         )
+
+
+@router.get("/scheduler/markdown/{date}")
+async def get_scheduler_markdown(date: str):
+    """根据日期获取 chatgpt_scheduler 目录下的 Markdown 文件内容
+    
+    Args:
+        date: 日期字符串，格式为 YYYY-MM-DD，例如 2025-10-07
+    
+    Returns:
+        JSON 响应包含 Markdown 内容
+    """
+    import os
+    from pathlib import Path
+    
+    try:
+        # 构建文件路径
+        base_dir = Path(__file__).parent.parent.parent  # 项目根目录
+        md_file_path = base_dir / "data" / "chatgpt_scheduler" / f"{date}.md"
+        
+        app_logger.info(f"尝试读取 Markdown 文件: {md_file_path}")
+        
+        # 检查文件是否存在
+        if not md_file_path.exists():
+            app_logger.warning(f"Markdown 文件不存在: {md_file_path}")
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "success": False,
+                    "error": f"找不到日期为 {date} 的 Markdown 文件",
+                    "file_path": str(md_file_path)
+                }
+            )
+        
+        # 读取文件内容
+        with open(md_file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        app_logger.info(f"成功读取 Markdown 文件，长度: {len(content)}")
+        
+        return JSONResponse(
+            status_code=200,
+            content={
+                "success": True,
+                "date": date,
+                "content": content,
+                "file_path": str(md_file_path)
+            }
+        )
+        
+    except Exception as e:
+        app_logger.error(f"读取 Markdown 文件失败: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success": False,
+                "error": f"读取文件失败: {str(e)}"
+            }
+        )

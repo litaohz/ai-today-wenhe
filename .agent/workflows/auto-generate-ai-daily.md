@@ -22,7 +22,9 @@ Execute the `screenshot-replace-md` skill.
 Execute the `md-2-html` skill.
 - **Input**: Use the **screenshot-replaced** Markdown file from Step 2.
 - **Action**: Run the `md-2-html` skill on that file.
-- **Output**: This usually creates a file like `archives-YYMMDD/ai_posts_summary_YYYY-MM-DD-ghc.html`.
+
+25: - **Output**: This will create a file `archives-YYMMDD/ai_posts_summary_YYYY-MM-DD.html` (using the `templates/layout.html`).
+
 
 ## Step 4: Capture HTML Screenshots
 Execute the `html-2-screenshot` skill.

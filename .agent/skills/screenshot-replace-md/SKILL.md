@@ -23,32 +23,41 @@ Create a copy of a Markdown file and replace one or more URLs in the copy with l
 8. Save the screenshot with a descriptive name inside the `archives-<YYMMDD>` directory.
 9. Replace the URL in the **new** Markdown copy with a Markdown image link to the screenshot (relative path).
 
-## X/Twitter Screenshot Rules
 
-When the URL is a tweet or X/Twitter post, capture only the tweet container:
+26: ## X/Twitter Smart Capture Rules
+27: 
+28: When the URL is a tweet or X/Twitter profile link:
+29: 
+30: ### 1. Topic Verification (Smart Check)
+31: - **Do NOT** blindly capture the first tweet if it is a "Pinned" tweet.
+32: - **Check specific keywords**: Ensure the tweet text matches the keywords or topic from the summary (e.g., if the summary mentions "Veo", the tweet MUST contain "Veo").
+33: - **Scroll if needed**: If the first tweet is pinned and irrelevant (e.g., an old feature announcement), scroll down to find the *actual* news tweet.
+34: - **Expand text**: Click "Show more" if the key content is truncated.
+35: 
+36: ### 2. Visual Composition
+37: - **Include**: Author info (profile pic, name, handle), full tweet text, media (if any), engagement metrics.
+38: - **Exclude**: Left navigation, right sidebar/search, and replies/comments below the metrics.
+39: - **Target**: Identify the `<article>` element corresponding to the correct tweet and capture that element specifically.
+40: 
+41: ## Replacement Format
+42: 
+43: Use Markdown image syntax and keep paths relative to the Markdown file when possible:
+44: 
+45: ```
+46: ![descriptive-alt-text](./path/to/screenshot.png)
+47: ```
+48: 
+49: ## File Naming
+50: 
+51: Use a descriptive, stable filename based on author and content, for example:
+52: 
+53: ```
+54: author-handle-keywords.png
+55: ```
+56: 
+57: ## Quality Checks
+58: 
+59: - **Relevance**: Does the screenshot actually match the news item description?
+60: - **Translation**: Is Chinese translation visible (if requested/available)?
+61: - **Focus**: Is the screenshot tight and focused on the core content without UI chrome?
 
-- Include: author info (profile pic, name, handle), tweet text, media (if any), engagement metrics.
-- Exclude: left navigation, right sidebar/search, and anything below metrics (replies/comments).
-- Prefer an element screenshot of the main tweet article element.
-
-## Replacement Format
-
-Use Markdown image syntax and keep paths relative to the Markdown file when possible:
-
-```
-![descriptive-alt-text](./path/to/screenshot.png)
-```
-
-## File Naming
-
-Use a descriptive, stable filename based on author and content, for example:
-
-```
-author-handle-keywords.png
-```
-
-## Quality Checks
-
-- Translation is visible in the captured area.
-- Screenshot is tight and focused on core content only.
-- No UI chrome, sidebars, or replies included.

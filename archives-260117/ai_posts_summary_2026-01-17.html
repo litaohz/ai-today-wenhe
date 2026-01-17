@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026/01/17 硅谷AI圈动态</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo-container">
+                <span class="main-title-inline">2026/01/17 硅谷AI圈动态</span>
+            </div>
+            <p class="subtitle">过去24小时，硅谷AI大佬在讨论什么</p>
+            <p class="data-source">数据来源：X(twitter)平台实时推文</p>
+
+            <div class="creators-container">
+                <div class="creator-badge">
+                    <img src="../assets/小禾说AI logo.png" class="creator-logo-small">
+                    <span class="creator-name">小禾说AI (公众号)</span>
+                </div>
+                <div class="creator-badge">
+                    <img src="../assets/小禾说AI logo.png" class="creator-logo-small">
+                    <span class="creator-name">清华小禾说AI (视频号)</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+        </header>
+
+        <!-- 概览 -->
+        <section class="overview-card">
+            <h2 class="overview-title">📊 总览</h2>
+            <p class="overview-text">
+                在这 24 小时内，AI圈迎来多模型与智能体技术的集中爆发：
+            </p>
+
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>主题</th>
+                        <th>关键事件</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="topic-tag">Google Gemini</span></td>
+                        <td>发布 Veo 3.1、Deep Think 及 Nano Banana 模型</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">Smart Agents</span></td>
+                        <td>Antigravity 推出“临时消息”增强指令遵循</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">Claude</span></td>
+                        <td>Claude Cowork 协作工具面向 Pro 用户上线</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">DeepMind</span></td>
+                        <td>发布基于 Gemma 3 的 TranslateGemma 开源模型</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">NVIDIA</span></td>
+                        <td>AI Factory 赋能 Caterpillar 重型工业自动化</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">OpenAI</span></td>
+                        <td>Sam Altman 披露档案回应 Elon Musk 诉讼</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 详情 1: Google Gemini -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">1</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Google Gemini - 多模型爆发：Veo 3.1 & Deep Think</h3>
+                </div>
+            </div>
+
+            <div class="detail-meta">
+                <span><strong>发布者</strong>：Google Gemini</span>
+                <span><strong>时间</strong>：2026-01-16 约 21:30 UTC</span>
+            </div>
+
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🚀 核心发布</h4>
+                    <ul class="content-list">
+                        <li><span class="highlight">Veo 3.1</span>: 支持从文本生成电影级 4K 高画质视频，现已集成至 Gemini 应用。</li>
+                        <li><span class="highlight">Deep Think</span>: 全新的逻辑推理模型，正式对所有用户开放，侧重于移动端复杂推理。</li>
+                        <li><span class="highlight">Nano Banana</span>: 极小极快的本地化模型，专为边缘设备设计，支持离线运行。</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h4>📸 相关截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="gemini_veo_3_1.png" alt="Gemini Veo 3.1 Tweet"
+                                onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder>Gemini Veo 3.1 Tweet Screenshot</div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详情 2: Google Antigravity -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">2</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Google Antigravity - 智能体指令遵循技术突破</h3>
+                </div>
+            </div>
+
+            <div class="detail-meta">
+                <span><strong>发布者</strong>：Google Antigravity</span>
+                <span><strong>时间</strong>：2026-01-16 约 19:30 UTC</span>
+            </div>
+
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🤖 技术创新</h4>
+                    <ul class="content-list">
+                        <li><span class="highlight">临时消息 (Ephemeral Messages)</span>:
+                            提出一种新机制，通过在推理过程中插入动态辅助消息，显著增强模型对长难指令的遵循能力。</li>
+                        <li><span class="highlight">Artifacts (动态中间体)</span>: 确立以“动态中间体”作为用户与智能体协作的单一事实来源，提升工作流透明度。</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h4>📸 相关截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="antigravity_ephemeral.png" alt="Antigravity Tweet"
+                                onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder>Antigravity Ephemeral Messages Tweet Screenshot</div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详情 3: Claude -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">3</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Claude / Anthropic - Claude Cowork 全面开放</h3>
+                </div>
+            </div>
+
+            <div class="detail-meta">
+                <span><strong>发布者</strong>：Claude</span>
+                <span><strong>时间</strong>：2026-01-16 约 18:30 UTC</span>
+            </div>
+
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>💼 办公协作新范式</h4>
+                    <ul class="content-list">
+                        <li><span class="highlight">Claude Cowork</span>: 基于 Claude Code 的通用协作工具正式面向 Pro 订阅用户开放。</li>
+                        <li>不仅协助代码编写，更通过“协同工作”模式深入一般性办公文档和复杂项目流的管理。</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h4>📸 相关截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="claude_cowork.png" alt="Claude Cowork Tweet"
+                                onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder>Claude Cowork Tweet Screenshot</div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详情 4: DeepMind -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">4</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Google DeepMind - TranslateGemma 开源</h3>
+                </div>
+            </div>
+
+            <div class="detail-meta">
+                <span><strong>发布者</strong>：Demis Hassabis</span>
+                <span><strong>时间</strong>：2026-01-16</span>
+            </div>
+
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🌍 无障碍交流</h4>
+                    <ul class="content-list">
+                        <li><span class="highlight">TranslateGemma</span>: 全新开源翻译模型系列，基于性能强大的 <strong>Gemma 3</strong>
+                            构建。</li>
+                        <li>在 55 种语言翻译任务中，表现超越体积大两倍的竞品，且针对边缘设备进行了极致优化。</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h4>📸 相关截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="demis_gemma_3.png" alt="TranslateGemma Tweet"
+                                onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder>TranslateGemma Tweet Screenshot</div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详情 5: NVIDIA -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">5</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">NVIDIA - AI 赋能重型工业自动化</h3>
+                </div>
+            </div>
+
+            <div class="detail-meta">
+                <span><strong>发布者</strong>：NVIDIA AI</span>
+                <span><strong>时间</strong>：2026-01-17 约 00:30 UTC</span>
+            </div>
+
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🏗️ 工业数字孪生</h4>
+                    <ul class="content-list">
+                        <li>展示与 <span class="highlight">卡特彼勒 (Caterpillar)</span> 的深度合作案例。</li>
+                        <li>利用 NVIDIA AI Factory、Omniverse 和边缘 AI 驱动“数字孪生”，实现重型设备高度自主化，大幅提升施工安全与效率。</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h4>📸 相关截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="nvidia_caterpillar.png" alt="NVIDIA Caterpillar Tweet"
+                                onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder>NVIDIA Caterpillar Tweet Screenshot</div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详情 6: OpenAI -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">6</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">OpenAI - 法律纠纷反击：披露历史档案</h3>
+                </div>
+            </div>
+
+            <div class="detail-meta">
+                <span><strong>发布者</strong>：Sam Altman</span>
+                <span><strong>时间</strong>：2026-01-16 约 21:30 UTC</span>
+            </div>
+
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>⚖️ 历史真相</h4>
+                    <ul class="content-list">
+                        <li>Sam Altman 公开发布了 <span class="highlight">2017 年 9 月的通话记录</span>。</li>
+                        <li>有力反驳了 Elon Musk 在诉讼中的说法（声称反对营利性转型），记录显示 Elon 当时积极推动或至少知情这一转型，标志着法律博弈升级。</li>
+                    </ul>
+                </div>
+
+                <div class="content-section">
+                    <h4>📸 相关截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="sama_elon_call.png" alt="Sam Altman Tweet"
+                                onerror="this.parentElement.innerHTML='<div class=screenshot-placeholder>Sam Altman Tweet Screenshot</div>'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <div class="qr-section">
+                <h3>✨ 加入「小禾AI交流群」</h3>
+                <p class="qr-subtitle">扫码加入群聊，群内每日更新《今日硅谷AI圈动态》</p>
+                <p class="qr-subtitle">每天 5 分钟，第一时间了解硅谷 AI 大佬在 X 上的最新讨论</p>
+                <div class="qr-grid">
+                    <div class="qr-item">
+                        <div class="qr-image">
+                            <!-- 确保引用正确的二维码图片 -->
+                            <img src="../assets/0116_1.JPG" alt="扫码加群">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="copyright">© 2026 小禾说AI · AI Today Daily · All Rights Reserved</p>
+        </footer>
+    </div>
+</body>
+
+</html>

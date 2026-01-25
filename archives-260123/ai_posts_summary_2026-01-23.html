@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026/01/23 硅谷AI圈动态</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo-container">
+                <span class="main-title-inline">2026/01/23 硅谷AI圈动态</span>
+            </div>
+            <p class="subtitle">过去24小时，硅谷AI大佬在讨论什么</p>
+            <p class="data-source">数据来源：X(twitter)平台实时推文</p>
+
+            <div class="creators-container">
+                <div class="creator-badge">
+                    <img src="../assets/小禾说AI logo.png" class="creator-logo-small">
+                    <span class="creator-name">小禾说AI (公众号)</span>
+                </div>
+                <div class="creator-badge">
+                    <img src="../assets/小禾说AI logo.png" class="creator-logo-small">
+                    <span class="creator-name">清华小禾说AI (视频号)</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+        </header>
+
+        <!-- 概览 -->
+        <section class="overview-card">
+            <h2 class="overview-title">📊 总览</h2>
+            <p class="overview-text">
+                过去24小时，硅谷AI圈X账号活跃度中等，主要聚焦于AI工具和功能发布(Cursor 2.4新版本、Petri 2.0、AI学习工具等)，暂无重大技术突破。
+            </p>
+
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>主题</th>
+                        <th>关键事件</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="topic-tag">Cursor升级</span></td>
+                        <td>Cursor 2.4引入并行SubAgents，集成Nano Banana Pro支持图像生成</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">AI安全审计</span></td>
+                        <td>Anthropic发布Petri 2.0，增强对抗评估感知能力</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">Agent开发平台</span></td>
+                        <td>LangChain推出Agent Builder模板库，提供即用型代理方案</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">AI教育</span></td>
+                        <td>Google AI推出SAT练习考试、Khan Academy写作辅导等学习工具</td>
+                    </tr>
+                    <tr>
+                        <td><span class="topic-tag">AI生图</span></td>
+                        <td>Google Gemini展示Nano Banana Pro的新创意玩法</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 详情卡片区域 -->
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">1</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Cursor - 发布2.4新版本（并行SubAgents、集成Banana）</h3>
+                </div>
+            </div>
+            <div class="detail-meta">
+                <span><strong>发布者：</strong>Cursor</span>
+                <span><strong>时间：</strong>2026-01-23 04:23 北京时间 (2026-01-22 12:23 PST)</span>
+            </div>
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🚀 核心内容</h4>
+                    <ul class="content-list">
+                        <li><strong>并行处理能力：</strong>Cursor 2.4版本引入子代理(subagents)技术，可同时并行完成任务的不同部分，显著提升整体执行速度</li>
+                        <li><strong>上下文优化：</strong>通过子代理分工，更高效利用上下文窗口，支持处理更长时间运行的复杂任务</li>
+                        <li><strong>功能扩展：</strong>新增图像生成能力(集成Nano Banana Pro)、智能澄清问题等交互功能</li>
+                        <li><strong>实际演示：</strong>推文附带视频展示了多个子代理同时修复不同文件的lint问题(如deeplink-utils.ts、layout-content.tsx等)
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-section">
+                    <h4>📸 原帖截图</h4>
+                    <div class="screenshots-layout-1-3">
+                        <div class="screenshot-main">
+                            <img src="./1-0.png" alt="Cursor 2.4主要功能展示">
+                        </div>
+                        <div class="screenshot-side">
+                            <div class="screenshot-item">
+                                <img src="./1-1.png" alt="Cursor并行SubAgents演示1">
+                            </div>
+                            <div class="screenshot-item">
+                                <img src="./1-2.png" alt="Cursor并行SubAgents演示2">
+                            </div>
+                            <div class="screenshot-item">
+                                <img src="./1-3.png" alt="Cursor并行SubAgents演示3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">2</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Anthropic - Petri 2.0对齐审计工具升级</h3>
+                </div>
+            </div>
+            <div class="detail-meta">
+                <span><strong>发布者：</strong>Anthropic</span>
+                <span><strong>时间：</strong>2026-01-23 08:08 北京时间 (2026-01-22 16:08 PST)</span>
+            </div>
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🚀 核心内容</h4>
+                    <ul class="content-list">
+                        <li><strong>核心改进：</strong>Petri 2.0增强了对抗"评估感知"(eval-awareness)能力，防止模型在审计时"作弊"</li>
+                        <li><strong>行为覆盖扩展：</strong>扩展了行为种子(behavior seeds)范围，能够审计更广泛的模型行为模式</li>
+                        <li><strong>开源定位：</strong>作为开源自动化对齐审计工具，Petri全称为"Parallel Exploration Tool for Risky
+                            Interactions"，专注于在各种场景下审计前沿AI模型的行为</li>
+                    </ul>
+                </div>
+                <div class="content-section">
+                    <h4>📸 原帖截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="./2.png" alt="Anthropic Petri 2.0发布">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">3</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">LangChain - Agent Builder模板库上线</h3>
+                </div>
+            </div>
+            <div class="detail-meta">
+                <span><strong>发布者：</strong>LangChain</span>
+                <span><strong>时间：</strong>2026-01-23 02:32 北京时间 (2026-01-22 10:32 PST)</span>
+            </div>
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🚀 核心内容</h4>
+                    <ul class="content-list">
+                        <li><strong>即用型模板：</strong>推出Agent Builder模板库，提供Email Assistant(邮件助手)、Competitor
+                            Research(竞争对手研究)、Document Review(文档审阅)等多种现成可部署的代理模板</li>
+                        <li><strong>灵活定制：</strong>模板不仅是起点，用户可通过自然语言反馈对代理进行完全定制</li>
+                        <li><strong>快速部署：</strong>模板已准备好直接部署到生产环境，降低代理开发门槛</li>
+                        <li><strong>模板亮点：</strong>推文线程中列出了6个特色模板的详细介绍</li>
+                    </ul>
+                </div>
+                <div class="content-section">
+                    <h4>📸 原帖截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="./3.png" alt="LangChain Agent Builder模板库">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">4</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Google AI - 教育领域AI工具矩阵发布</h3>
+                </div>
+            </div>
+            <div class="detail-meta">
+                <span><strong>发布者：</strong>Google AI</span>
+                <span><strong>时间：</strong>2026-01-23 22:00 北京时间 (2026-01-23 14:00 UTC)</span>
+            </div>
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🚀 核心内容</h4>
+                    <ul class="content-list">
+                        <li><strong>标准化考试准备：</strong>与Princeton Review合作，在Gemini App中推出免费完整SAT练习考试，后续将推出更多考试类型</li>
+                        <li><strong>写作与阅读辅导：</strong>Khan Academy集成Gemini能力，推出Writing Coach(写作教练)帮助学生掌握论文写作，Reading
+                            Coach(阅读教练)即将上线</li>
+                        <li><strong>同伴辅导增强：</strong>非营利平台Schoolhouse.world整合Gemini，为辅导者提供反馈和指导，提升辅导质量</li>
+                        <li><strong>个性化学习：</strong>强调通过多样化工具满足不同学生的学习方式和需求</li>
+                    </ul>
+                </div>
+                <div class="content-section">
+                    <h4>📸 原帖截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="./4.png" alt="Google AI教育工具发布">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="detail-header">
+                <div class="detail-number">5</div>
+                <div class="detail-title-group">
+                    <h3 class="detail-title">Google Gemini - Nano Banana Pro的新创意玩法</h3>
+                </div>
+            </div>
+            <div class="detail-meta">
+                <span><strong>发布者：</strong>Google Gemini</span>
+                <span><strong>时间：</strong>2026-01-23 07:45 北京时间 (2026-01-22 15:45 PST)</span>
+            </div>
+            <div class="detail-content">
+                <div class="content-section">
+                    <h4>🚀 核心内容</h4>
+                    <ul class="content-list">
+                        <li><strong>混合现实创作：</strong>展示使用Nano Banana Pro生成的街头时尚混合现实肖像作品，将真实人物与插画风格无缝融合</li>
+                        <li><strong>创作示例：</strong>推文引用用户作品，展示了64K DSLR分辨率的混合现实街头肖像效果</li>
+                        <li><strong>社区互动：</strong>邀请用户分享自己使用Nano Banana Pro创作的作品，推动创意社区发展</li>
+                        <li><strong>技术亮点：</strong>支持上传真实照片后生成保持人物面部特征的混合现实艺术作品</li>
+                    </ul>
+                </div>
+                <div class="content-section">
+                    <h4>📸 原帖截图</h4>
+                    <div class="screenshots">
+                        <div class="screenshot-item">
+                            <img src="./5.png" alt="Google Gemini Nano Banana Pro创意">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer class="footer">
+            <div class="qr-section">
+                <h3>✨ 加入「小禾AI交流群」</h3>
+                <p class="qr-subtitle">不错过<硅谷AI圈动态>每日更新</p>
+                <div class="qr-grid">
+                    <div class="qr-item">
+                        <div class="qr-image">
+                            <!-- 二维码资源路径，生成时请确保图片存在 -->
+                            <img src="../assets/0116_1.JPG" alt="扫码加群">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="copyright">© 2026 小禾说AI · AI Today Daily · All Rights Reserved</p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -9,7 +9,7 @@
 过去 24 小时内，xAI 的 Grok 系列产品更新频繁，同时 Google DeepMind 发布了强大的端侧翻译模型。
 
 | 主题 | 关键事件 |
-|------|----------|
+| :--- | :--- |
 | **xAI / Grok** | 发布 Grok Voice 语音模式 & Grok 4.20 预告 |
 | **Google DeepMind** | 发布 TranslateGemma 端侧翻译模型 |
 | **OpenAI** | ChatGPT 记忆功能改进 |

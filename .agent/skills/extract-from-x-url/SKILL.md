@@ -11,8 +11,30 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 当用户已经收集了一批X/Twitter推文链接（通常来自AI领域重要人物），需要将这些链接转化为一份结构化的中文摘要报告时，使用此技能。
 
 ## 输入
+
+### 输入类型1: 直接链接列表
 - **X链接列表**: 用户提供的一组X/Twitter推文URL
 - **可选的初步摘要**: 用户可能提供每条链接的简要描述
+
+### 输入类型2: 对话内容 (含总体观察) -> 转化为 Raw 文件
+用户在对话框中直接发送包含"总体观察"和"链接列表"的文本内容。
+
+**Agent 必须执行的前置动作**:
+1.  解析用户内容中的日期（或使用当前日期）
+2.  新建文件夹 `archives-YYMMDD`
+3.  新建文件 `raw-YYMMDD.md`
+4.  将用户在对话中提供的所有内容，**原封不动**地写入该文件
+
+**内容示例**:
+```markdown
+总体观察：过去24小时AI动态以产品更新（Gemini/Anthropic）、研究发布和合作为主，无重大突破性新闻。
+
+@mntruell
+（Cursor CEO）Cursor代理最佳实践分享
+...
+```
+
+**处理规则**: 当提供 raw 文件时，"总体观察"内容应该被改写并用于生成最终文档中"📊 总览"部分的第一句话
 
 ## 指令 (Instructions)
 
@@ -36,6 +58,122 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 - 如果出现“显示更多” (Show more) 或类似按钮，请点击以加载更多历史内容。
 
 **注意**: 可以并行访问多个链接以提高效率，每个链接使用不同的 `RecordingName`。
+
+### 1.1 智能截图 (Smart Screenshot Capture)
+
+在访问每个链接并提取文本的同时，必须进行高质量、干净的截图。截图不应包含任何不相关的浏览器UI、侧边栏或焦点框。
+
+#### 实施步骤 (Implementation Steps)
+
+1.  **准备环境 (Cleanup & Layout)**:
+    - **隐藏基础干扰元素**: 使用 JavaScript 隐藏以下元素：
+        - 左侧导航栏: `header[role="banner"]`
+        - 右侧搜索/推荐栏: `[data-testid="sidebarColumn"]`
+        - 底部登录/注册提示: `[data-testid="bottom_bar"]`, `#layers`
+        - 内联回复框: `[data-testid="inline_reply_offering_container"]`
+    
+    - **清除所有浮动元素**: 遍历所有 `fixed` 和 `sticky` 定位的元素并隐藏：
+        ```javascript
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            const style = window.getComputedStyle(el);
+            if (style.position === 'fixed' || style.position === 'sticky') {
+                el.style.display = 'none';
+                el.style.visibility = 'hidden';
+            }
+        });
+        ```
+        **注意**: 这会移除翻译小部件、浮动按钮等所有干扰元素。
+    
+    - **调整布局**: 
+        - 主内容列居中: 设置 `[data-testid="primaryColumn"]` 的样式：
+            ```javascript
+            primaryColumn.style.float = 'none';
+            primaryColumn.style.margin = '0 auto';
+            primaryColumn.style.maxWidth = '600px';
+            primaryColumn.style.width = '100%';
+            ```
+        - 调整父容器以支持居中效果
+    
+    - **移除焦点**: `if (document.activeElement) document.activeElement.blur();`
+
+2.  **验证翻译**:
+    - **检查并点击翻译按钮**: 在执行 UI 清理前，先确保翻译已激活：
+        ```javascript
+        const translateButton = Array.from(article.querySelectorAll('[role="button"], span'))
+            .find(el => el.textContent.toLowerCase().includes('translate post'));
+        if (translateButton) translateButton.click();
+        ```
+    - **等待翻译加载**: 点击后等待 1-2 秒让翻译内容完全显示
+
+3.  **上下文判断与处理 (Context Preservation)**:
+    - **自动检测回复关系**: 检查页面中是否有多个 `article` 元素：
+        ```javascript
+        const articles = document.querySelectorAll('article');
+        const isReply = articles.length >= 2;
+        ```
+    - **包含原推文的条件**:
+        - 目标推文是回复（URL 包含上下文或页面显示多条推文）
+        - 目标推文本身内容较短或引用了上文（如 "This is huge", "Nice work"）
+    - **确保两条推文都可见**:
+        - 调整窗口高度: `browser_resize_window` 增加高度至 2000px
+        - 滚动到对话顶部: `articles[0].scrollIntoView({ behavior: 'auto', block: 'start' });`
+        - 移除原推文前的所有内容以避免截图时被裁切
+
+4.  **精确控制滚动位置**:
+    - **重置所有边距和填充**:
+        ```javascript
+        document.documentElement.style.marginTop = '0';
+        document.body.style.marginTop = '0';
+        const primaryColumn = document.querySelector('[data-testid="primaryColumn"]');
+        if (primaryColumn) {
+            primaryColumn.style.marginTop = '0';
+            primaryColumn.style.paddingTop = '0';
+        }
+        ```
+    - **滚动到绝对顶部**: 
+        - 先执行 `window.scrollTo(0, 0);`
+        - 如果顶部有固定头部，再向上偏移: `window.scrollBy(0, -100);`
+    - **验证可见性**: 确保第一条推文的头像和用户名完全可见
+
+5.  **执行截图**:
+    - **优先尝试元素级截图**: 
+        - 找到包含所有相关推文的共同父元素
+        - 使用 `capture_browser_screenshot` 的 `CaptureByElementIndex` 功能
+    - **Fallback 到视口截图**: 
+        - 确保内容居中、完整
+        - 无多余白边或裁切
+    - **最终检查**: 截图应包含：
+        - ✅ 完整的用户头像和名称
+        - ✅ 推文正文（英文原文）
+        - ✅ 中文翻译
+        - ✅ 如有媒体内容（图片、链接卡片），应完整显示
+        - ✅ 互动数据（回复数、转发数、点赞数）
+        - ✅ 发布时间
+        - ❌ 无浏览器 UI、导航栏、侧边栏
+        - ❌ 无焦点框、浮动按钮
+
+6.  **保存路径**: 
+    - 目标目录: `archives-YYMMDD`（根据当前日期自动生成）
+    - 文件命名: `1.png`, `2.png`, `3.png`... (对应链接在列表中的顺序)
+    - 确保目录存在再保存文件
+
+#### 常见问题与解决方案 (Troubleshooting)
+
+- **问题**: 截图顶部被裁切，看不到用户头像
+  - **解决**: 增加向上滚动偏移量 `window.scrollBy(0, -200);` 或 `window.scrollBy(0, -300);`
+
+- **问题**: 浮动翻译按钮出现在截图右侧
+  - **解决**: 在截图前确保已执行完整的 `fixed`/`sticky` 元素清理
+
+- **问题**: 无法同时看到原推文和回复推文
+  - **解决**: 增加浏览器窗口高度至 2000px 或更高，并隐藏中间无关的回复
+
+- **问题**: 翻译未显示
+  - **解决**: 在 UI 清理前先点击翻译按钮，并等待 1-2 秒
+
+- **问题**: 元素级截图失败 (element index not found)
+  - **解决**: 切换到视口截图，确保内容已正确滚动到可见区域
 
 ### 2. 内容分析与合并 (Content Analysis & Merging)
 
@@ -63,7 +201,12 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 
 **时间范围**: YYYY-MM-DD HH:MM UTC - YYYY-MM-DD HH:MM UTC
 
-### 概览表格
+---
+
+## 📊 总览
+
+[总结性开场语句 - 如果用户提供了raw文件中的"总体观察"，则基于此改写；否则根据提取的内容自行总结]
+
 | 主题 | 关键事件 |
 | :--- | :--- |
 | **[主题1]** | [一句话摘要] |
@@ -72,7 +215,7 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 
 ---
 
-### 详细内容
+## 🔥 重点帖子详情
 
 #### 1. [公司/实体] - [标题/主题]
 **发布者**: [姓名] (@handle)，[职位]
@@ -82,7 +225,13 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 - [要点2]
 - [要点3]
 
+**核心内容的内容要求**:
+- 1. 根据推文的内容，理解原文并总结，不要只100%照搬原文；
+- 2. 如果该推文的内容，只能总结为一句话，则不要强行分点，可以灵活一些；
+- 3. 每一条要点前，用关键词提炼该要点，并加粗
+
 **链接**: [URL] 或多个链接列表
+![screenshot](N.png)  (注意：对应本条内容的截图文件, N为序号)
 
 #### 2. [公司/实体] - [下一个主题]
 ...
@@ -90,11 +239,12 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 
 ### 4. 格式规范 (Formatting Rules)
 
+
 **必须遵循**:
 - 所有文本使用**中文**（技术术语可保留英文）
 - 概览表格的关键事件应简洁（一句话）
-- 不包含互动数据（点赞、转发、浏览量等）
-- 链接放在每条内容的最后
+- **一步到位**: 生成的 Markdown 文件必须包含截图引用 (`![xxx](N.png)`)
+- 链接放在每条内容的最后，紧接着是截图
 - 如果一条内容有多个相关链接，使用列表格式
 
 **核心内容格式**:
@@ -111,8 +261,12 @@ description: 根据用户提供的X/Twitter链接列表，打开浏览器查看�
 ```
 
 ## 输出格式
+
 - **文件夹**: `archives-YYMMDD/`
-- **文件**: `ai_posts_summary_YYYY-MM-DD.md`
+- **文件**: 
+  - `ai_posts_summary_YYYY-MM-DD.md`
+  - 截图文件: `1.png`, `2.png`, ...
+
 - **语言**: 中文
 
 ## 示例
@@ -133,3 +287,17 @@ Tesla AI 芯片路线图：AI4-AI7/Dojo3
 
 ### 场景3: 需要合并相似主题
 当两条来自同一作者、讨论同一话题的推文出现时，主动合并并告知用户。
+
+### 场景4: 用户提供完整摘要文本（含总体观察）
+用户在对话中发送了一大段文本，包含总体观察和多个推文链接信息。
+
+**处理流程**:
+1.  **创建原始归档**: 
+    - 创建 `archives-YYMMDD` 文件夹
+    - 创建 `raw-YYMMDD.md`
+    - 将用户的**完整输入内容**写入文件
+2.  **执行提取**: 解析内容中的链接，并行访问、截图、提取
+3.  **文件管理**: 将截图从临时目录复制到 `archives-YYMMDD`
+4.  **生成报告**: 
+    - 引用 `raw-YYMMDD.md` 中的"总体观察"改写作为"📊 总览"开头
+    - 生成 `ai_posts_summary_YYYY-MM-DD.md`

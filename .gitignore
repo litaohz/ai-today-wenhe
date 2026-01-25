@@ -36,8 +36,6 @@ env/
 .DS_Store
 Thumbs.db
 
-# Archives
-archives-*/
 
 # Logs
 logs

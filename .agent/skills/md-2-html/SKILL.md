@@ -9,6 +9,60 @@ description: Convert AI Today Markdown summaries into a styled HTML page with th
 
 将 AI 日报的 Markdown 内容转换为**日系/清新/明亮**的紫色主题 HTML 页面。页面采用白色半透明叠加态设计，视觉轻盈，适合阅读和移动端分享。
 
+## 内容生成规则
+
+### 发布者身份格式
+
+在生成HTML时，需要处理Markdown中的"发布者"信息，遵循以下规则：
+
+1. **删除X账号@提及**：如果Markdown中写明了X账号（如@mntruell、@antigravity），在HTML中应删除@符号和账号名
+2. **个人发布者需补充身份**：
+   - 如果发布者是个人（如Elon Musk、Sam Altman、Michael Truell），需要补充其身份说明
+   - 身份应选择该人担任的AI相关公司中最大、最高的那个职位
+   - 身份使用括号格式，如：`Elon Musk (X CEO)`、`Michael Truell (Cursor AI CEO)`
+3. **公司/产品发布者无需额外身份**：如果发布者是公司或产品（如OpenAI、GeminiApp、AnthropicAI），则不需要补充额外说明
+
+**示例**：
+- Markdown: `发布者: Elon Musk (@elonmusk)` → HTML: `Elon Musk (X CEO)`
+- Markdown: `发布者: Michael Truell (@mntruell)` → HTML: `Michael Truell (Cursor AI CEO)`
+- Markdown: `发布者: AnthropicAI (@AnthropicAI)` → HTML: `AnthropicAI`
+- Markdown: `发布者: Google Antigravity (@antigravity)` → HTML: `Google Antigravity`
+
+### 标点符号规范
+
+HTML生成时，所有中文标点符号**必须使用全角**，括号除外：
+
+- **全角标点**（必须转换）：
+  - 逗号：`,` → `，`
+  - 句号（如适用）：`.` → `。`
+  - 冒号：`:` → `：`
+  - 分号：`;` → `；`
+  - 引号：`"` → `"`（使用全角CJK引号）
+  - 问号（如适用）：`?` → `？`
+  - 感叹号（如适用）：`!` → `！`
+
+- **保持半角**（不转换）：
+  - 括号：`()` 保持半角
+  - 英文内容中的标点符号保持半角
+  - 技术术语、代码相关内容中的标点符号保持原样
+
+**示例**：
+- `发布者: Elon Musk` → `发布者：Elon Musk`
+- `时间: 2026-01-20` → `时间：2026-01-20`
+- `"The Assistant Axis"研究,探索` → `"The Assistant Axis"研究，探索`
+- `(word-level inline diffs),进一步` → `(word-level inline diffs)，进一步`（括号保持半角，逗号改全角）
+
+### 关于链接
+删除所有链接
+
+### 总览文案 (Overview Text)
+
+HTML 页面中 "总览" 模块的 `overview-text` 内容，**必须** 动态提取自 Markdown 文件。
+
+- **来源**: Markdown 文件 `## 📊 总览` 标题下的第一段文本（通常为一句话总结）。
+- **操作**: 提取该段文本，替换 HTML 模板中 `<p class="overview-text">...</p>` 的内容。
+
+
 ## 设计规范
 
 ### 1. 配色方案 (Color Palette)
@@ -63,9 +117,13 @@ description: Convert AI Today Markdown summaries into a styled HTML page with th
 - **标签**: `border-radius: 20px`，带 emoji 前缀 (如 🎙️)
 
 #### 截图展示
+
 - 图片圆角 12px
 - 阴影 `box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2)`
 - 边框 `1px solid #e9d5ff`
+
+**特殊布局提示**：如果某个新闻有4张截图，其中1张图片较长（如完整推文），另外3张较短（如功能截图），可以考虑使用**左1右3布局**（左侧1张大图 + 右侧3张小图垂直排列），实现主次分明的视觉效果。详细实现方法见 [`LAYOUT-1-3-EXAMPLE.md`](./LAYOUT-1-3-EXAMPLE.md)。
+
 
 ### 4. 底部 (Footer - Redesigned)
 
@@ -80,6 +138,88 @@ description: Convert AI Today Markdown summaries into a styled HTML page with th
     - 单图居中展示
     - 图片带悬浮效果 (Hover transform)
     - 阴影加重
+
+### 5. 水印 (Watermark - Content Protection)
+
+**⚠️ 重要**: 所有生成的HTML页面都**必须**包含防盗用水印！
+
+#### 设计理念
+- **目的**: 防止内容被他人窃取或搬运，保护原创内容版权
+- **原则**: 既要起到防盗作用，又不能影响用户阅读体验
+- **平衡点**: 透明度控制在5%-8%之间，水印可见但不干扰
+
+#### 实现方法
+使用CSS `body::after` 伪元素 + 内联SVG背景图实现：
+
+```css
+body {
+    position: relative; /* 必须设置，为水印定位提供基准 */
+}
+
+body::after {
+    content: "";
+    position: fixed;       /* 固定定位，滚动时水印始终覆盖 */
+    top: 0;
+    left: 0;
+    width: 200%;          /* 超大尺寸确保完整覆盖 */
+    height: 200%;
+    pointer-events: none; /* 不阻挡页面交互 */
+    z-index: 9999;        /* 最高层级 */
+    background-size: 300px 150px;
+    background-image: url("data:image/svg+xml,..."); /* SVG水印 */
+    transform: translate(-25%, -25%);
+}
+```
+
+#### 水印参数说明
+
+| 参数 | 值 | 说明 |
+|------|-----|------|
+| **水印文字** | `清华小禾说AI` | 默认品牌名称 |
+| **字体大小** | `16px` | SVG中的font-size |
+| **旋转角度** | `-35度` | 斜角排列，与水平线夹角 |
+| **透明度** | `0.06` (6%) | fill-opacity，**关键参数** |
+| **颜色** | `#9333ea` | 紫色，与页面主题一致 |
+| **间距** | `300x150px` | 水印重复单元大小 |
+
+#### 透明度调整建议
+
+```
+太淡 (不推荐)     合适范围         太浓 (影响阅读)
+    ↓               ↓                    ↓
+   3%  4%   [5%  6%  7%  8%]   9%  10%  12%
+
+推荐值: 6% (0.06) - 经过实测的最佳平衡点
+```
+
+#### 修改水印文字
+
+如需修改水印内容，编辑SVG中的文字部分：
+
+```svg
+<!-- 当前: 清华小禾说AI -->
+<text ...>清华小禾说AI</text>
+
+<!-- 修改为其他品牌 -->
+<text ...>小禾说AI (公众号)</text>
+```
+
+**注意**: 修改后需同步调整：
+- `background-size`: 文字变长时增大宽度（如`350px 150px`）
+- `transform rotate`: 旋转中心点需对应新的宽度（如`rotate(-35, 175, 75)`）
+
+#### 实施检查清单
+
+生成HTML时，确保：
+- ✅ CSS文件中包含完整的水印代码
+- ✅ `body` 元素有 `position: relative`
+- ✅ `body::after` 伪元素存在且样式完整
+- ✅ 透明度设置在 5%-8% 范围内
+- ✅ 水印文字与品牌一致
+- ✅ 在浏览器中预览，确认水印可见但不影响阅读
+
+**📖 详细技术文档**: 见 [`WATERMARK.md`](./WATERMARK.md) - 包含完整的实现原理、参数调优经验、常见问题解决方案
+
 
 
 ## HTML 模板 (Template)
@@ -120,7 +260,7 @@ description: Convert AI Today Markdown summaries into a styled HTML page with th
         </div>
         <!-- Screenshots section -->
         <div class="content-section">
-            <h4>📸 相关截图</h4>
+            <h4>📸 原帖截图</h4>
             <div class="screenshots">
                 <div class="screenshot-item">
                     <img src="./path/to/screenshot.png" alt="Alt Text">

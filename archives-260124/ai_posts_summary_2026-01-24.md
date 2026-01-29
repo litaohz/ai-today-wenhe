@@ -6,7 +6,7 @@
 
 ## 📊 总览
 
-过去24小时，相关账号整体节奏活跃但不算爆炸式，主要是新模型或新功能更新。Microsoft推出了机器人基础模型Rho-alpha，Anthropic在产品集成上动作频频（Excel插件与Cowork更新），Cursor上线了Agent Skills。此外，学术界大佬吴恩达和Yann LeCun也分别发表了对AI改变企业工作流程和AGI发展速度的深入观点。
+过去24小时，相关账号整体节奏活跃但不算爆炸式，主要是新模型（Microsoft Rho-alpha）或新功能（Claude、Cursor、xAI）更新，学术界大佬吴恩达和Yann LeCun也分别发表了对AI改变企业工作流程和AGI的观点。
 
 | 主题 | 关键事件 |
 | :--- | :--- |
